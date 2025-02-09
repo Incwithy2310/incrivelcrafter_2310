@@ -1,0 +1,13 @@
+local _="Instance";local a="ScreenGui";local b="Frame";local c="TextButton";local d="UserInputService";local e="Mouse";local f="TweenService";local g=game:GetService("Players").LocalPlayer;local h=game:GetService("RunService");local i=game:GetService("Workspace").CurrentCamera;local j=game:GetService("Players").LocalPlayer:GetMouse();local k=Vector2.new;local l=UDim2.new;local m=Color3.fromRGB;local n=Vector2.new(0,0);local o=Vector2.new(200,50)
+
+local p=Instance.new(_);p.Name="x";p.Parent=g:WaitForChild("PlayerGui")
+local q=Instance.new(b);q.Size=l(0,300,0,100);q.Position=l(0.5,-150,0.5,-50);q.BackgroundColor3=m(169,169,169);q.Parent=p;
+local r=Instance.new(c);r.Size=l(0,150,0,50);r.Position=l(0.5,-75,0.5,-25);r.BackgroundColor3=m(255,0,0);r.Text="bored button";r.Parent=q;
+local s=game.Players.LocalPlayer:GetMouse();local t=nil;
+
+q.InputBegan:Connect(function(u,v)if v then return end;if u.UserInputType==Enum.UserInputType.MouseButton1 then
+    local w,x=s.X,s.Y;local y=game:GetService("RunService").Heartbeat:Connect(function()q.Position=l(0,math.clamp(s.X-w,0,i.ViewportSize.X-300),0,math.clamp(s.Y-x,0,i.ViewportSize.Y-100))end)
+    u.InputEnded:Connect(function()y:Disconnect()end)end end);
+
+r.MouseButton1Click:Connect(function()
+    game:GetService("Players").LocalPlayer.Character:BreakJoints()end)

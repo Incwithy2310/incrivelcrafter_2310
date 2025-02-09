@@ -1,13 +1,3 @@
-local v0=display.newRect
-local v1=display.contentCenterX
-local v2=display.contentCenterY
-local v3=table.insert
-local v4=setmetatable
-local v5=math.random
-
-local function v6()
-    local v7=v0(v1,v2,100,100) -- Cria um quadrado
-    v7:setFillColor(0,0,1) -- Define a cor azul
-end
-
-v6()
+local a=Instance.new local b=game.GetService local c=a("ScreenGui")local d=a("Frame")c.Parent=b(game,"CoreGui")
+d.Parent=c d.Size=UDim2.new(0,100,0,100)d.Position=UDim2.new(0.5,-50,0.5,-50)d.BackgroundColor3=Color3.fromRGB(0,0,255)
+d.BorderRadius=UDim.new(0,20)

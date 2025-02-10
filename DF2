@@ -1,15 +1,58 @@
--- Fling e sentar
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:WaitForChild("Humanoid")
 local root = char:WaitForChild("HumanoidRootPart")
 
-task.wait(0.1) -- Pequeno delay para evitar falhas
+-- Criar o ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Fling extremamente forte na direção que o jogador está olhando
-local direction = root.CFrame.LookVector * 250  -- Aumentei a força para 250
-root.Velocity = direction
-root.AssemblyLinearVelocity = direction  -- Garante que o fling funcione bem
+-- Criar o botão
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
+button.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
+button.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
+button.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+button.Text = "Impulso"
+button.Parent = screenGui
 
-task.wait(0.2) -- Espera um pouco antes de sentar
-humanoid.Sit = true
+-- Permitir movimentar o botão manualmente no celular
+local dragging, input, startPos, uiStartPos
+
+button.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        input = i
+        startPos = i.Position
+        uiStartPos = button.Position
+    end
+end)
+
+button.InputChanged:Connect(function(i)
+    if dragging and i == input then
+        local delta = i.Position - startPos
+        button.Position = UDim2.new(
+            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
+            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+button.InputEnded:Connect(function(i)
+    if i == input then
+        dragging = false
+    end
+end)
+
+-- Função do Fling
+local function flingPlayer()
+    local direction = root.CFrame.LookVector * 250  -- Força do impulso
+    root.Velocity = direction
+    root.AssemblyLinearVelocity = direction  -- Garante o impulso correto
+
+    task.wait(0.2)  -- Pequeno delay antes de sentar
+    humanoid.Sit = true
+end
+
+-- Conectar o clique ao botão
+button.MouseButton1Click:Connect(flingPlayer)

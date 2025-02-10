@@ -1,0 +1,11 @@
+-- Fling e sentar
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+
+-- Fling para o lado
+local flingDirection = Vector3.new(50, 0, 0)  -- Modifique os valores para controlar a direção
+humanoid:MoveTo(char.PrimaryPart.Position + flingDirection)
+
+-- Sentar
+humanoid.Sit = true

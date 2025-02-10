@@ -18,11 +18,11 @@ menuFrame.Parent = screenGui
 
 -- Criar a barra de título (para mover o menu)
 local titleBar = Instance.new("Frame")
-titleBar.Size = UDim2.new(1, 0, 0, 20)  -- Barra no topo do menu
-titleBar.Position = UDim2.new(0, 0, 0, -20)  -- Acima do menu
+titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho corrigido da barra
+titleBar.Position = UDim2.new(0.5, -60, 0.5, -70)  -- Acima do menu
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
 titleBar.BorderSizePixel = 2  -- Borda na barra
-titleBar.Parent = screenGui  -- Agora a barra fica separada do menu!
+titleBar.Parent = screenGui  -- A barra fica separada do menu
 
 -- Criar o botão de minimizar/maximizar ("-" / "+")
 local toggleButton = Instance.new("TextButton")
@@ -87,8 +87,7 @@ titleBar.InputChanged:Connect(function(i)
             uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
             uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
         )
-        titleBar.Position = UDim2.new(menuFrame.Position.X.Scale, menuFrame.Position.X.Offset, 
-                                      menuFrame.Position.Y.Scale, menuFrame.Position.Y.Offset - 20)
+        titleBar.Position = UDim2.new(0, menuFrame.Position.X.Offset, 0, menuFrame.Position.Y.Offset - 20)
     end
 end)
 

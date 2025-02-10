@@ -53,7 +53,7 @@ soundButton.Parent = menuFrame
 
 -- Criar o som
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://YOUR_SOUND_ID"  -- Substitua pelo ID do som
+sound.SoundId = "rbxassetid://7147740690"  -- Substitua pelo ID do som
 sound.Volume = 1
 sound.Parent = soundButton
 

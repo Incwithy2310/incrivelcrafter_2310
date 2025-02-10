@@ -1,0 +1,12 @@
+-- Fling e sentar
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+local torso = char:WaitForChild("HumanoidRootPart")
+
+-- Fling na direção que o personagem está olhando
+local direction = torso.CFrame.LookVector * 100  -- Modifique o número 100 para ajustar a força
+torso.Velocity = direction
+
+-- Sentar após o fling
+humanoid.Sit = true

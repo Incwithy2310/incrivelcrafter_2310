@@ -11,7 +11,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Criar o fundo do menu
 local menuFrame = Instance.new("Frame")
 menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do menu
-menuFrame.Position = UDim2.new(0.5, -30, 0.75, 0)  -- Posição inicial
+menuFrame.Position = UDim2.new(0.5, -60, 0.5, -50)  -- No centro da tela
 menuFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139)  -- Azul escuro
 menuFrame.BorderSizePixel = 2
 menuFrame.Parent = screenGui
@@ -53,7 +53,7 @@ soundButton.Parent = menuFrame
 
 -- Criar o som
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://7147740690"  -- Substitua pelo ID do som
+sound.SoundId = "rbxassetid://7147740690"  -- ID do som atualizado
 sound.Volume = 1
 sound.Parent = soundButton
 
@@ -95,16 +95,13 @@ titleBar.InputEnded:Connect(function(i)
     end
 end)
 
--- Minimizar/Maximizar menu
+-- Minimizar/Maximizar menu (esconde tudo, menos a barra e o botão)
 local menuVisible = true
 
 toggleButton.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible  -- Inverte o estado
-    for _, v in ipairs(menuFrame:GetChildren()) do
-        if v ~= titleBar and v ~= toggleButton then
-            v.Visible = menuVisible  -- Esconde/mostra os elementos
-        end
-    end
+    menuFrame.Visible = menuVisible  -- Esconde/mostra o menu inteiro
+    titleBar.Visible = true  -- A barra sempre fica visível
     toggleButton.Text = menuVisible and "-" or "+"  -- Alterna entre "-" e "+"
 end)
 

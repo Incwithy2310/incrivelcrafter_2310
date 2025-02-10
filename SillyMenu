@@ -1,0 +1,111 @@
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+local root = char:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera  -- Pega a câmera do jogador
+
+-- Criar o ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Criar o fundo do menu
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do menu
+menuFrame.Position = UDim2.new(0.1, 0, 0.5, -50)  -- Posição perto da barra de itens
+menuFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139)  -- Azul escuro
+menuFrame.BorderSizePixel = 2
+menuFrame.Parent = screenGui
+
+-- Criar a barra de título (para mover o menu)
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho da barra corrigido
+titleBar.Position = UDim2.new(0.1, 0, 0.5, -70)  -- Acima do menu
+titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
+titleBar.BorderSizePixel = 2  -- Borda na barra
+titleBar.Parent = screenGui  -- A barra fica separada do menu
+
+-- Criar o botão de minimizar/maximizar ("-" / "+")
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 20, 0, 20)
+toggleButton.Position = UDim2.new(1, -22, 0, 0)  -- No canto da barra
+toggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)  -- Cinza médio
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+toggleButton.Text = "-"  -- Começa como "-"
+toggleButton.Parent = titleBar
+
+-- Criar o botão de impulso
+local impulsoButton = Instance.new("TextButton")
+impulsoButton.Size = UDim2.new(0, 100, 0, 50)
+impulsoButton.Position = UDim2.new(0, 10, 0, 10)  -- Dentro do menu
+impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Azul
+impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Branco
+impulsoButton.Text = "Impulso"
+impulsoButton.Parent = menuFrame
+
+-- Criar o botão de som
+local soundButton = Instance.new("TextButton")
+soundButton.Size = UDim2.new(0, 100, 0, 50)
+soundButton.Position = UDim2.new(0, 10, 0, 65)  -- Mais abaixo
+soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+soundButton.Text = "som silly :P"
+soundButton.Parent = menuFrame
+
+-- Criar o som
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://7147740690"  -- ID do som atualizado
+sound.Volume = 1
+sound.Parent = soundButton
+
+-- Função para o impulso
+local function flingPlayer()
+    local direction = camera.CFrame.LookVector * 250  -- Direção da câmera
+    root.Velocity = direction
+    root.AssemblyLinearVelocity = direction
+
+    task.wait(0.2)  -- Pequeno delay antes de sentar
+    humanoid.Sit = true
+end
+
+-- Função de mover o menu com a barra
+local dragging = false
+local startPos
+local startFramePos
+
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        startPos = input.Position
+        startFramePos = menuFrame.Position
+    end
+end)
+
+titleBar.InputChanged:Connect(function(input)
+    if dragging then
+        local delta = input.Position - startPos
+        menuFrame.Position = UDim2.new(startFramePos.X.Scale, startFramePos.X.Offset + delta.X, startFramePos.Y.Scale, startFramePos.Y.Offset + delta.Y)
+    end
+end)
+
+titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- Minimizar/Maximizar menu (esconde tudo, menos a barra e o botão)
+local menuVisible = true
+
+toggleButton.MouseButton1Click:Connect(function()
+    menuVisible = not menuVisible  -- Inverte o estado
+    menuFrame.Visible = menuVisible  -- Esconde/mostra o menu inteiro
+    toggleButton.Text = menuVisible and "-" or "+"  -- Alterna entre "-" e "+"
+end)
+
+-- Função para tocar o som ao clicar
+soundButton.MouseButton1Click:Connect(function()
+    sound:Play()
+end)
+
+-- Conectar o clique ao botão de impulso
+impulsoButton.MouseButton1Click:Connect(flingPlayer)

@@ -21,22 +21,31 @@ local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 20)  -- Barra no topo do menu
 titleBar.Position = UDim2.new(0, 0, 0, -20)  -- Acima do menu
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
-titleBar.BorderSizePixel = 1
+titleBar.BorderSizePixel = 2  -- Borda na barra
 titleBar.Parent = menuFrame
+
+-- Criar o botão de minimizar/maximizar ("-" / "+")
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 20, 0, 20)
+toggleButton.Position = UDim2.new(1, -22, 0, 0)  -- No canto da barra
+toggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)  -- Cinza médio
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+toggleButton.Text = "-"  -- Começa como "-"
+toggleButton.Parent = titleBar
 
 -- Criar o botão de impulso
 local impulsoButton = Instance.new("TextButton")
 impulsoButton.Size = UDim2.new(0, 100, 0, 50)
 impulsoButton.Position = UDim2.new(0, 10, 0, 10)  -- Dentro do menu
-impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
-impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Azul
+impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Branco
 impulsoButton.Text = "Impulso"
 impulsoButton.Parent = menuFrame
 
 -- Criar o botão de som
 local soundButton = Instance.new("TextButton")
 soundButton.Size = UDim2.new(0, 100, 0, 50)
-soundButton.Position = UDim2.new(0, 10, 0, 65)  -- Mais abaixo dentro do menu
+soundButton.Position = UDim2.new(0, 10, 0, 65)  -- Mais abaixo
 soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 soundButton.Text = "som silly :P"
@@ -84,6 +93,19 @@ titleBar.InputEnded:Connect(function(i)
     if i == input then
         dragging = false
     end
+end)
+
+-- Minimizar/Maximizar menu
+local menuVisible = true
+
+toggleButton.MouseButton1Click:Connect(function()
+    menuVisible = not menuVisible  -- Inverte o estado
+    for _, v in ipairs(menuFrame:GetChildren()) do
+        if v ~= titleBar and v ~= toggleButton then
+            v.Visible = menuVisible  -- Esconde/mostra os elementos
+        end
+    end
+    toggleButton.Text = menuVisible and "-" or "+"  -- Alterna entre "-" e "+"
 end)
 
 -- Função para tocar o som ao clicar

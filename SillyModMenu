@@ -18,7 +18,7 @@ menuFrame.Parent = screenGui
 
 -- Criar a barra de título (para mover o menu)
 local titleBar = Instance.new("Frame")
-titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho corrigido da barra
+titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho da barra corrigido
 titleBar.Position = UDim2.new(0.5, -60, 0.5, -70)  -- Acima do menu
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
 titleBar.BorderSizePixel = 2  -- Borda na barra

@@ -9,6 +9,7 @@ local button = Instance.new("ImageButton")
 button.Size = UDim2.new(0, 100, 0, 100)  -- Tamanho do botão
 button.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
 button.Image = "rbxassetid://17868600736"  -- Substitua pelo ID da imagem
+button.ImageRectSize = Vector2.new(100, 100)  -- Define o tamanho da imagem
 button.Parent = screenGui
 
 -- Criar o som

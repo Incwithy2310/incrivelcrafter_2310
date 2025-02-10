@@ -1,0 +1,108 @@
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+local root = char:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera  -- Pega a câmera do jogador
+
+-- Criar o ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Criar o botão de impulso
+local impulsoButton = Instance.new("TextButton")
+impulsoButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
+impulsoButton.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
+impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
+impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+impulsoButton.Text = "Impulso"
+impulsoButton.Parent = screenGui
+
+-- Criar o botão de som
+local soundButton = Instance.new("TextButton")
+soundButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
+soundButton.Position = UDim2.new(0.5, -50, 0.9, 0)  -- Posição inicial (embaixo do impulso)
+soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
+soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+soundButton.Text = "som silly :P"
+soundButton.Parent = screenGui
+
+-- Criar o som
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://YOUR_SOUND_ID"  -- Substitua pelo ID do som
+sound.Volume = 1
+sound.Parent = soundButton
+
+-- Função para o impulso
+local function flingPlayer()
+    local direction = camera.CFrame.LookVector * 250  -- Direção da câmera
+    root.Velocity = direction
+    root.AssemblyLinearVelocity = direction
+
+    task.wait(0.2)  -- Pequeno delay antes de sentar
+    humanoid.Sit = true
+end
+
+-- Permitir mover os botões no celular e PC (ambos acompanhando o movimento)
+local dragging, input, startPos, uiStartPos
+
+local function moveButtons(i)
+    if dragging then
+        local delta = i.Position - startPos
+        local newPos = UDim2.new(
+            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
+            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
+        )
+        impulsoButton.Position = newPos
+        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.1, newPos.Y.Offset)  -- Ajuste para o somButton ficar abaixo do impulsoButton
+    end
+end
+
+impulsoButton.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        input = i
+        startPos = i.Position
+        uiStartPos = impulsoButton.Position
+    end
+end)
+
+impulsoButton.InputChanged:Connect(function(i)
+    if dragging and i == input then
+        moveButtons(i)
+    end
+end)
+
+impulsoButton.InputEnded:Connect(function(i)
+    if i == input then
+        dragging = false
+    end
+end)
+
+soundButton.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        input = i
+        startPos = i.Position
+        uiStartPos = soundButton.Position
+    end
+end)
+
+soundButton.InputChanged:Connect(function(i)
+    if dragging and i == input then
+        moveButtons(i)
+    end
+end)
+
+soundButton.InputEnded:Connect(function(i)
+    if i == input then
+        dragging = false
+    end
+end)
+
+-- Função para tocar o som ao clicar
+soundButton.MouseButton1Click:Connect(function()
+    sound:Play()
+end)
+
+-- Conectar o clique ao botão de impulso
+impulsoButton.MouseButton1Click:Connect(flingPlayer)

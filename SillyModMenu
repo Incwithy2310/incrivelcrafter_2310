@@ -11,7 +11,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Criar o botão de impulso
 local impulsoButton = Instance.new("TextButton")
 impulsoButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-impulsoButton.Position = UDim2.new(0.5, -50, 0.85, 0)  -- Mais baixo na tela
+impulsoButton.Position = UDim2.new(0.5, -30, 0.75, 0)  -- Mais baixo na tela
 impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
 impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
 impulsoButton.Text = "Impulso"
@@ -20,7 +20,7 @@ impulsoButton.Parent = screenGui
 -- Criar o botão de som
 local soundButton = Instance.new("TextButton")
 soundButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-soundButton.Position = UDim2.new(0.5, -50, 0.95, 0)  -- Mais baixo e mais separado do impulso
+soundButton.Position = UDim2.new(0.5, -30, 0.95, 0)  -- Mais baixo e mais separado do impulso
 soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
 soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
 soundButton.Text = "som silly :P"

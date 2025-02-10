@@ -2,11 +2,14 @@
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:WaitForChild("Humanoid")
-local torso = char:WaitForChild("HumanoidRootPart")
+local root = char:WaitForChild("HumanoidRootPart")
 
--- Fling na direção que o personagem está olhando
-local direction = torso.CFrame.LookVector * 100  -- Modifique o número 100 para ajustar a força
-torso.Velocity = direction
+task.wait(0.1) -- Pequeno delay para evitar falhas
 
--- Sentar após o fling
+-- Fling extremamente forte na direção que o jogador está olhando
+local direction = root.CFrame.LookVector * 50000  -- Aumentei a força para 50.000
+root.Velocity = direction
+root.AssemblyLinearVelocity = direction  -- Garante que o fling funcione bem
+
+task.wait(0.2) -- Espera um pouco antes de sentar
 humanoid.Sit = true

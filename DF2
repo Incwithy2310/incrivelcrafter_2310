@@ -7,7 +7,7 @@ local root = char:WaitForChild("HumanoidRootPart")
 task.wait(0.1) -- Pequeno delay para evitar falhas
 
 -- Fling extremamente forte na direção que o jogador está olhando
-local direction = root.CFrame.LookVector * 50000  -- Aumentei a força para 50.000
+local direction = root.CFrame.LookVector * 5000  -- Aumentei a força para 50.000
 root.Velocity = direction
 root.AssemblyLinearVelocity = direction  -- Garante que o fling funcione bem
 

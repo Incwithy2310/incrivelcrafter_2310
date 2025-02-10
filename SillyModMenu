@@ -22,7 +22,7 @@ titleBar.Size = UDim2.new(1, 0, 0, 20)  -- Barra no topo do menu
 titleBar.Position = UDim2.new(0, 0, 0, -20)  -- Acima do menu
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
 titleBar.BorderSizePixel = 2  -- Borda na barra
-titleBar.Parent = menuFrame
+titleBar.Parent = screenGui  -- Agora a barra fica separada do menu!
 
 -- Criar o botão de minimizar/maximizar ("-" / "+")
 local toggleButton = Instance.new("TextButton")
@@ -76,6 +76,7 @@ titleBar.InputBegan:Connect(function(i)
         input = i
         startPos = i.Position
         uiStartPos = menuFrame.Position
+        titleBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)  -- Escurece um pouco ao segurar
     end
 end)
 
@@ -86,12 +87,15 @@ titleBar.InputChanged:Connect(function(i)
             uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
             uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
         )
+        titleBar.Position = UDim2.new(menuFrame.Position.X.Scale, menuFrame.Position.X.Offset, 
+                                      menuFrame.Position.Y.Scale, menuFrame.Position.Y.Offset - 20)
     end
 end)
 
 titleBar.InputEnded:Connect(function(i)
     if i == input then
         dragging = false
+        titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Volta à cor normal
     end
 end)
 
@@ -101,7 +105,6 @@ local menuVisible = true
 toggleButton.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible  -- Inverte o estado
     menuFrame.Visible = menuVisible  -- Esconde/mostra o menu inteiro
-    titleBar.Visible = true  -- A barra sempre fica visível
     toggleButton.Text = menuVisible and "-" or "+"  -- Alterna entre "-" e "+"
 end)
 

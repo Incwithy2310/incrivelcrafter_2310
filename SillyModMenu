@@ -67,34 +67,29 @@ local function flingPlayer()
     humanoid.Sit = true
 end
 
--- Permitir mover o menu apenas pela barra de título
-local dragging, input, startPos, uiStartPos
+-- Função de mover o menu com a barra
+local dragging = false
+local startPos
+local startFramePos
 
-titleBar.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
-        input = i
-        startPos = i.Position
-        uiStartPos = menuFrame.Position
-        titleBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)  -- Escurece um pouco ao segurar
+        startPos = input.Position
+        startFramePos = menuFrame.Position
     end
 end)
 
-titleBar.InputChanged:Connect(function(i)
-    if dragging and i == input then
-        local delta = i.Position - startPos
-        menuFrame.Position = UDim2.new(
-            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
-            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
-        )
-        titleBar.Position = UDim2.new(0, menuFrame.Position.X.Offset, 0, menuFrame.Position.Y.Offset - 20)
+titleBar.InputChanged:Connect(function(input)
+    if dragging then
+        local delta = input.Position - startPos
+        menuFrame.Position = UDim2.new(startFramePos.X.Scale, startFramePos.X.Offset + delta.X, startFramePos.Y.Scale, startFramePos.Y.Offset + delta.Y)
     end
 end)
 
-titleBar.InputEnded:Connect(function(i)
-    if i == input then
+titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = false
-        titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Volta à cor normal
     end
 end)
 

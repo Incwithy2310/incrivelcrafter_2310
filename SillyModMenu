@@ -10,11 +10,19 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 
 -- Criar o fundo do menu
 local menuFrame = Instance.new("Frame")
-menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do fundo
+menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do menu
 menuFrame.Position = UDim2.new(0.5, -30, 0.75, 0)  -- Posição inicial
-menuFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza escuro
+menuFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139)  -- Azul escuro
 menuFrame.BorderSizePixel = 2
 menuFrame.Parent = screenGui
+
+-- Criar a barra de título (para mover o menu)
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 20)  -- Barra no topo do menu
+titleBar.Position = UDim2.new(0, 0, 0, -20)  -- Acima do menu
+titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
+titleBar.BorderSizePixel = 1
+titleBar.Parent = menuFrame
 
 -- Criar o botão de impulso
 local impulsoButton = Instance.new("TextButton")
@@ -50,10 +58,10 @@ local function flingPlayer()
     humanoid.Sit = true
 end
 
--- Permitir mover apenas o menu (com os botões juntos)
+-- Permitir mover o menu apenas pela barra de título
 local dragging, input, startPos, uiStartPos
 
-impulsoButton.InputBegan:Connect(function(i)
+titleBar.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
         input = i
@@ -62,7 +70,7 @@ impulsoButton.InputBegan:Connect(function(i)
     end
 end)
 
-impulsoButton.InputChanged:Connect(function(i)
+titleBar.InputChanged:Connect(function(i)
     if dragging and i == input then
         local delta = i.Position - startPos
         menuFrame.Position = UDim2.new(
@@ -72,7 +80,7 @@ impulsoButton.InputChanged:Connect(function(i)
     end
 end)
 
-impulsoButton.InputEnded:Connect(function(i)
+titleBar.InputEnded:Connect(function(i)
     if i == input then
         dragging = false
     end

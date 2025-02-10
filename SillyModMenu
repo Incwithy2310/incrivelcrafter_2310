@@ -8,27 +8,35 @@ local camera = workspace.CurrentCamera  -- Pega a câmera do jogador
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+-- Criar o fundo do menu
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do fundo
+menuFrame.Position = UDim2.new(0.5, -30, 0.75, 0)  -- Posição inicial
+menuFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza escuro
+menuFrame.BorderSizePixel = 2
+menuFrame.Parent = screenGui
+
 -- Criar o botão de impulso
 local impulsoButton = Instance.new("TextButton")
-impulsoButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-impulsoButton.Position = UDim2.new(0.5, -30, 0.75, 0)  -- Mais baixo na tela
+impulsoButton.Size = UDim2.new(0, 100, 0, 50)
+impulsoButton.Position = UDim2.new(0, 10, 0, 10)  -- Dentro do menu
 impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
 impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
 impulsoButton.Text = "Impulso"
-impulsoButton.Parent = screenGui
+impulsoButton.Parent = menuFrame
 
 -- Criar o botão de som
 local soundButton = Instance.new("TextButton")
-soundButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-soundButton.Position = UDim2.new(0.5, -30, 0.95, 0)  -- Mais baixo e mais separado do impulso
-soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
-soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+soundButton.Size = UDim2.new(0, 100, 0, 50)
+soundButton.Position = UDim2.new(0, 10, 0, 65)  -- Mais abaixo dentro do menu
+soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 soundButton.Text = "som silly :P"
-soundButton.Parent = screenGui
+soundButton.Parent = menuFrame
 
 -- Criar o som
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://7147740690"  -- Substitua pelo ID do som
+sound.SoundId = "rbxassetid://YOUR_SOUND_ID"  -- Substitua pelo ID do som
 sound.Volume = 1
 sound.Parent = soundButton
 
@@ -42,58 +50,29 @@ local function flingPlayer()
     humanoid.Sit = true
 end
 
--- Permitir mover os botões no celular e PC (ambos acompanhando o movimento)
+-- Permitir mover apenas o menu (com os botões juntos)
 local dragging, input, startPos, uiStartPos
-
-local function moveButtons(i)
-    if dragging then
-        local delta = i.Position - startPos
-        local newPos = UDim2.new(
-            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
-            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
-        )
-        impulsoButton.Position = newPos
-        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.2, newPos.Y.Offset)  -- Mantém a separação
-    end
-end
 
 impulsoButton.InputBegan:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
         input = i
         startPos = i.Position
-        uiStartPos = impulsoButton.Position
+        uiStartPos = menuFrame.Position
     end
 end)
 
 impulsoButton.InputChanged:Connect(function(i)
     if dragging and i == input then
-        moveButtons(i)
+        local delta = i.Position - startPos
+        menuFrame.Position = UDim2.new(
+            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
+            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
+        )
     end
 end)
 
 impulsoButton.InputEnded:Connect(function(i)
-    if i == input then
-        dragging = false
-    end
-end)
-
-soundButton.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        input = i
-        startPos = i.Position
-        uiStartPos = soundButton.Position
-    end
-end)
-
-soundButton.InputChanged:Connect(function(i)
-    if dragging and i == input then
-        moveButtons(i)
-    end
-end)
-
-soundButton.InputEnded:Connect(function(i)
     if i == input then
         dragging = false
     end

@@ -11,7 +11,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Criar o botão de impulso
 local impulsoButton = Instance.new("TextButton")
 impulsoButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-impulsoButton.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
+impulsoButton.Position = UDim2.new(0.5, -50, 0.85, 0)  -- Mais baixo na tela
 impulsoButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
 impulsoButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
 impulsoButton.Text = "Impulso"
@@ -20,7 +20,7 @@ impulsoButton.Parent = screenGui
 -- Criar o botão de som
 local soundButton = Instance.new("TextButton")
 soundButton.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-soundButton.Position = UDim2.new(0.5, -50, 0.9, 0)  -- Posição inicial (embaixo do impulso)
+soundButton.Position = UDim2.new(0.5, -50, 0.95, 0)  -- Mais baixo e mais separado do impulso
 soundButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
 soundButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
 soundButton.Text = "som silly :P"
@@ -28,7 +28,7 @@ soundButton.Parent = screenGui
 
 -- Criar o som
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://YOUR_SOUND_ID"  -- Substitua pelo ID do som
+sound.SoundId = "rbxassetid://7147740690"  -- Substitua pelo ID do som
 sound.Volume = 1
 sound.Parent = soundButton
 
@@ -53,7 +53,7 @@ local function moveButtons(i)
             uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
         )
         impulsoButton.Position = newPos
-        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.1, newPos.Y.Offset)  -- Ajuste para o somButton ficar abaixo do impulsoButton
+        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.1, newPos.Y.Offset)  -- Mantém a separação
     end
 end
 

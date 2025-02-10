@@ -1,0 +1,51 @@
+local player = game.Players.LocalPlayer
+
+-- Criar o ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Criar o botão de imagem
+local button = Instance.new("ImageButton")
+button.Size = UDim2.new(0, 100, 0, 100)  -- Tamanho do botão
+button.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
+button.Image = "rbxassetid://11176073582"  -- Substitua pelo ID da imagem
+button.Parent = screenGui
+
+-- Criar o som
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://7147740690"  -- Substitua pelo ID do som
+sound.Volume = 1
+sound.Parent = button
+
+-- Permitir mover o botão no celular e PC
+local dragging, input, startPos, uiStartPos
+
+button.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        input = i
+        startPos = i.Position
+        uiStartPos = button.Position
+    end
+end)
+
+button.InputChanged:Connect(function(i)
+    if dragging and i == input then
+        local delta = i.Position - startPos
+        button.Position = UDim2.new(
+            uiStartPos.X.Scale, uiStartPos.X.Offset + delta.X,
+            uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+button.InputEnded:Connect(function(i)
+    if i == input then
+        dragging = false
+    end
+end)
+
+-- Função para tocar o som ao clicar
+button.MouseButton1Click:Connect(function()
+    sound:Play()
+end)

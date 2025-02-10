@@ -2,6 +2,7 @@ local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:WaitForChild("Humanoid")
 local root = char:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera  -- Pega a câmera do jogador
 
 -- Criar o ScreenGui
 local screenGui = Instance.new("ScreenGui")
@@ -9,14 +10,14 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 
 -- Criar o botão
 local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 100, 0, 50)  -- Tamanho do botão
-button.Position = UDim2.new(0.5, -50, 0.8, 0)  -- Posição inicial
-button.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Cor azul
-button.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto branco
+button.Size = UDim2.new(0, 100, 0, 50)
+button.Position = UDim2.new(0.5, -50, 0.8, 0)
+button.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.Text = "Impulso"
 button.Parent = screenGui
 
--- Permitir movimentar o botão manualmente no celular
+-- Permitir mover o botão no celular e PC
 local dragging, input, startPos, uiStartPos
 
 button.InputBegan:Connect(function(i)
@@ -44,13 +45,13 @@ button.InputEnded:Connect(function(i)
     end
 end)
 
--- Função do Fling
+-- Função do Fling baseado na CÂMERA
 local function flingPlayer()
-    local direction = root.CFrame.LookVector * 250  -- Força do impulso
+    local direction = camera.CFrame.LookVector * 250  -- Direção da câmera
     root.Velocity = direction
-    root.AssemblyLinearVelocity = direction  -- Garante o impulso correto
+    root.AssemblyLinearVelocity = direction
 
-    task.wait(0.2)  -- Pequeno delay antes de sentar
+    task.wait(0.2)
     humanoid.Sit = true
 end
 

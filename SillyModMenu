@@ -53,7 +53,7 @@ local function moveButtons(i)
             uiStartPos.Y.Scale, uiStartPos.Y.Offset + delta.Y
         )
         impulsoButton.Position = newPos
-        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.4, newPos.Y.Offset)  -- Mantém a separação
+        soundButton.Position = UDim2.new(newPos.X.Scale, newPos.X.Offset, newPos.Y.Scale + 0.2, newPos.Y.Offset)  -- Mantém a separação
     end
 end
 

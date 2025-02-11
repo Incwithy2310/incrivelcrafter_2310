@@ -11,18 +11,19 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Criar o fundo do menu
 local menuFrame = Instance.new("Frame")
 menuFrame.Size = UDim2.new(0, 120, 0, 120)  -- Tamanho do menu
-menuFrame.Position = UDim2.new(0.1, 0, 0.5, -50)  -- Posição perto da barra de itens
+menuFrame.Position = UDim2.new(0.5, -60, 0.5, -60)  -- Posição no centro da tela
 menuFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139)  -- Azul escuro
 menuFrame.BorderSizePixel = 2
+menuFrame.Visible = true  -- O menu começa visível
 menuFrame.Parent = screenGui
 
 -- Criar a barra de título (para mover o menu)
 local titleBar = Instance.new("Frame")
-titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho da barra corrigido
-titleBar.Position = UDim2.new(0.1, 0, 0.5, -70)  -- Acima do menu
+titleBar.Size = UDim2.new(0, 120, 0, 20)  -- Tamanho da barra
+titleBar.Position = UDim2.new(0.5, -60, 0.5, -80)  -- Acima do menu
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  -- Cinza
 titleBar.BorderSizePixel = 2  -- Borda na barra
-titleBar.Parent = screenGui  -- A barra fica separada do menu
+titleBar.Parent = menuFrame  -- Barra é filha do menuFrame
 
 -- Criar o botão de minimizar/maximizar ("-" / "+")
 local toggleButton = Instance.new("TextButton")
@@ -67,13 +68,15 @@ local function flingPlayer()
     humanoid.Sit = true
 end
 
--- Função de mover o menu com a barra
+-- Variáveis para movimentação do menu
 local dragging = false
 local startPos
 local startFramePos
 
+-- Função de arrastar a barra para mover o menu
 titleBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        -- Detecta clique no PC ou toque no celular
         dragging = true
         startPos = input.Position
         startFramePos = menuFrame.Position
@@ -82,13 +85,19 @@ end)
 
 titleBar.InputChanged:Connect(function(input)
     if dragging then
-        local delta = input.Position - startPos
+        local delta
+        if input.UserInputType == Enum.UserInputType.Touch then
+            delta = input.Position - startPos  -- Para toque
+        else
+            delta = input.Position - startPos  -- Para mouse
+        end
         menuFrame.Position = UDim2.new(startFramePos.X.Scale, startFramePos.X.Offset + delta.X, startFramePos.Y.Scale, startFramePos.Y.Offset + delta.Y)
     end
 end)
 
 titleBar.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        -- Detecta quando o toque ou clique é terminado
         dragging = false
     end
 end)
@@ -98,7 +107,13 @@ local menuVisible = true
 
 toggleButton.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible  -- Inverte o estado
-    menuFrame.Visible = menuVisible  -- Esconde/mostra o menu inteiro
+    -- Apenas esconder o conteúdo do menu (os botões e o fundo), mas manter a barra e o botão visíveis
+    for _, child in ipairs(menuFrame:GetChildren()) do
+        if child ~= titleBar and child ~= toggleButton then
+            child.Visible = menuVisible  -- Esconde/mostra o conteúdo
+        end
+    end
+    menuFrame.BackgroundTransparency = menuVisible and 0 or 1  -- Esconde/mostra o fundo
     toggleButton.Text = menuVisible and "-" or "+"  -- Alterna entre "-" e "+"
 end)
 
